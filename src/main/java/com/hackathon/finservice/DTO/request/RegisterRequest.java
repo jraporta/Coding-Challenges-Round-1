@@ -1,13 +1,23 @@
 package com.hackathon.finservice.DTO.request;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
-@AllArgsConstructor
+@Setter
+@NoArgsConstructor
 public class RegisterRequest {
-    @NotEmpty private String name;
-    @NotEmpty private String password;
-    @NotEmpty private String email;
+
+    @NotEmpty(message = "Name is required")
+    private String name;
+
+    @NotEmpty(message = "Password is required")
+    private String password;
+
+    @NotEmpty(message = "email is required")
+    @Email(message = "Invalid email")
+    private String email;
 }
