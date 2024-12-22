@@ -10,14 +10,15 @@ import lombok.*;
 @Getter
 @Setter
 @AllArgsConstructor
-@RequiredArgsConstructor
+@NoArgsConstructor
+@Builder
 @Entity
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NonNull private String name;
-    @NonNull private String email;
-    @NonNull private String hashedPassword;
+    private String name;
+    private String email;
+    private String hashedPassword;
 }

@@ -1,6 +1,5 @@
 package com.hackathon.finservice.Controllers;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hackathon.finservice.DTO.request.LoginRequest;
 import com.hackathon.finservice.DTO.request.RegisterRequest;
 import com.hackathon.finservice.DTO.response.LoginResponse;
@@ -20,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 public class AuthenticationController {
 
     private final AuthenticationService authenticationService;
-    private final ObjectMapper objectMapper;
 
     @PostMapping("/register")
     public ResponseEntity<RegisterResponse> register(@Validated @RequestBody RegisterRequest request) {

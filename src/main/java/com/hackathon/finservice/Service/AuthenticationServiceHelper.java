@@ -18,8 +18,12 @@ public class AuthenticationServiceHelper {
     }
 
     public RegisterResponse mapToRegisterResponse(User user, Account account) {
-        return new RegisterResponse(user.getName(), user.getEmail(),
-                account.getAccountNumber(), account.getAccountType(),
-                user.getHashedPassword());
+        return new RegisterResponse(
+                user.getName(),
+                user.getEmail(),
+                account.getAccountNumber(),
+                account.getAccountType(),
+                user.getHashedPassword()
+        );
     }
 }
