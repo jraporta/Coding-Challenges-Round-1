@@ -5,6 +5,9 @@ import com.hackathon.finservice.Repositories.AccountRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Optional;
+
 @Service
 @AllArgsConstructor
 public class AccountService {
@@ -13,5 +16,12 @@ public class AccountService {
 
     public Account createAccount(Long userId) {
         return accountRepository.save(new Account("Main", userId));
+    }
+
+    public Optional<Account> getMainAccount(Long id) {
+        List<Account> accounts = accountRepository.findByUserId(id);
+        return accounts.stream()
+                .filter(account -> account.getAccountType().equalsIgnoreCase("Main"))
+                .findFirst();
     }
 }

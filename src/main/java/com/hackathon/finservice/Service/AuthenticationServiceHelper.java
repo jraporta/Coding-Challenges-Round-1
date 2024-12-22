@@ -1,6 +1,6 @@
 package com.hackathon.finservice.Service;
 
-import com.hackathon.finservice.DTO.response.RegisterResponse;
+import com.hackathon.finservice.DTO.response.UserInfoResponse;
 import com.hackathon.finservice.Entities.Account;
 import com.hackathon.finservice.Entities.User;
 import jakarta.validation.constraints.NotEmpty;
@@ -17,8 +17,8 @@ public class AuthenticationServiceHelper {
     public void checkPasswordFormat(@NotEmpty String password) {
     }
 
-    public RegisterResponse mapToRegisterResponse(User user, Account account) {
-        return new RegisterResponse(
+    public UserInfoResponse mapToUserInfoResponse(User user, Account account) {
+        return new UserInfoResponse(
                 user.getName(),
                 user.getEmail(),
                 account.getAccountNumber(),

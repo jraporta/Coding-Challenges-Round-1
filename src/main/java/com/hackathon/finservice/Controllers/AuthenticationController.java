@@ -3,7 +3,7 @@ package com.hackathon.finservice.Controllers;
 import com.hackathon.finservice.DTO.request.LoginRequest;
 import com.hackathon.finservice.DTO.request.RegisterRequest;
 import com.hackathon.finservice.DTO.response.LoginResponse;
-import com.hackathon.finservice.DTO.response.RegisterResponse;
+import com.hackathon.finservice.DTO.response.UserInfoResponse;
 import com.hackathon.finservice.Service.AuthenticationService;
 
 import lombok.AllArgsConstructor;
@@ -21,7 +21,7 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
     @PostMapping("/register")
-    public ResponseEntity<RegisterResponse> register(@Validated @RequestBody RegisterRequest request) {
+    public ResponseEntity<UserInfoResponse> register(@Validated @RequestBody RegisterRequest request) {
         log.debug("Register request with data: {}", request);
         return ResponseEntity.ok(authenticationService.register(request));
     }

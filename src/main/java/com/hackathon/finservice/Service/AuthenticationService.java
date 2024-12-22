@@ -3,7 +3,7 @@ package com.hackathon.finservice.Service;
 import com.hackathon.finservice.DTO.request.LoginRequest;
 import com.hackathon.finservice.DTO.request.RegisterRequest;
 import com.hackathon.finservice.DTO.response.LoginResponse;
-import com.hackathon.finservice.DTO.response.RegisterResponse;
+import com.hackathon.finservice.DTO.response.UserInfoResponse;
 import com.hackathon.finservice.Entities.Account;
 import com.hackathon.finservice.Exception.EmailAlreadyExistsException;
 import com.hackathon.finservice.Security.JwtTokenUtil;
@@ -32,7 +32,7 @@ public class AuthenticationService {
     private final JwtTokenUtil jwtTokenUtil;
     private final PasswordEncoder passwordEncoder;
 
-    public RegisterResponse register(RegisterRequest request) {
+    public UserInfoResponse register(RegisterRequest request) {
         helper.checkPasswordFormat(request.getPassword());
         log.debug("Password passed format check");
         if (userService.existsByEmail(request.getEmail())) {
@@ -48,7 +48,7 @@ public class AuthenticationService {
         log.debug("Registered User: {}", user);
         Account account = accountService.createAccount(user.getId());
         log.debug("Created Account: {}", account);
-        return helper.mapToRegisterResponse(user, account);
+        return helper.mapToUserInfoResponse(user, account);
     }
 
     public LoginResponse login(LoginRequest request) {
