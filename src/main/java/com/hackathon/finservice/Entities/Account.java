@@ -10,6 +10,7 @@ import lombok.*;
 @Setter
 @AllArgsConstructor
 @RequiredArgsConstructor
+@NoArgsConstructor
 @Entity
 public class Account {
 
