@@ -11,9 +11,11 @@ import lombok.AllArgsConstructor;
 import com.hackathon.finservice.Entities.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -50,10 +52,18 @@ public class AuthenticationService {
     }
 
     public LoginResponse login(LoginRequest request) {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getIdentifier(), request.getPassword()));
+        String email = request.getIdentifier();
+        if (!userService.existsByEmail(email)) {
+            throw new UsernameNotFoundException("User not found for the given identifier: " + email);
+        }
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(email, request.getPassword()));
+        } catch (BadCredentialsException e) {
+            throw new BadCredentialsException("Bad Credentials");
+        }
         log.debug("Authenticated login request: {}", request);
-        UserDetails userDetails = userDetailsService.loadUserByUsername(request.getIdentifier());
+        UserDetails userDetails = userDetailsService.loadUserByUsername(email);
         final String token = jwtTokenUtil.generateToken(userDetails);
         log.debug("Generated token for user: {}", userDetails);
         return new LoginResponse(token);
