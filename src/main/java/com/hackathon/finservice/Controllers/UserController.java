@@ -1,7 +1,9 @@
 package com.hackathon.finservice.Controllers;
 
+import com.hackathon.finservice.DTO.DtoMapper;
 import com.hackathon.finservice.DTO.response.AccountResponse;
 import com.hackathon.finservice.DTO.response.UserInfoResponse;
+import com.hackathon.finservice.Entities.Account;
 import com.hackathon.finservice.Exception.AccountNotFoundException;
 import com.hackathon.finservice.Service.UserService;
 import lombok.AllArgsConstructor;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     UserService userService;
+    DtoMapper mapper;
 
     @GetMapping("/dashboard/user")
     public ResponseEntity<UserInfoResponse> retrieveUserDetails(@AuthenticationPrincipal UserDetails userDetails){
@@ -24,7 +27,8 @@ public class UserController {
 
     @GetMapping("/dashboard/account")
     public ResponseEntity<AccountResponse> retrieveMainAccountDetails(@AuthenticationPrincipal UserDetails userDetails){
-        return ResponseEntity.ok(userService.retrieveMainAccountDetails(userDetails.getUsername()));
+        Account account = userService.retrieveMainAccount(userDetails.getUsername());
+        return ResponseEntity.ok(mapper.mapToAccountResponse(account));
     }
 
     @GetMapping("/dashboard/account/{index}")

@@ -1,4 +1,7 @@
 package com.hackathon.finservice.Entities;
 
-public class TransactionStatus {
+public enum TransactionStatus {
+
+    PENDING, APPROVED, FRAUD
+
 }

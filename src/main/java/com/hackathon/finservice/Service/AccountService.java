@@ -37,4 +37,9 @@ public class AccountService {
         List<Account> accounts = accountRepository.findByUserId(id);
         return accounts.get(index);
     }
+
+    public void deposit(Account account, double amount) {
+        account.setBalance(account.getBalance() + amount);
+        accountRepository.save(account);
+    }
 }

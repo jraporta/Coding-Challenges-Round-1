@@ -1,4 +1,9 @@
 package com.hackathon.finservice.Entities;
 
-public class TransactionType {
+public enum TransactionType {
+
+    CASH_WITHDRAWAL,
+    CASH_DEPOSIT,
+    CASH_TRANSFER
+
 }

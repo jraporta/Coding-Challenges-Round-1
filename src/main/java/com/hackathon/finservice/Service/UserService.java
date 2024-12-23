@@ -43,12 +43,12 @@ public class UserService {
     }
 
 
-    public AccountResponse retrieveMainAccountDetails(String email) {
+    public Account retrieveMainAccount(String email) {
         User user = userRepository.findByEmail(email).orElseThrow();
         log.debug("Retrieved User: {}", user);
         Account account = accountService.getMainAccount(user.getId()).orElseThrow();
         log.debug("Retrieved Main Account: {}", account);
-        return mapper.mapToAccountResponse(account);
+        return account;
     }
 
     public Long checkOwnership(String accountNumber, String email) {

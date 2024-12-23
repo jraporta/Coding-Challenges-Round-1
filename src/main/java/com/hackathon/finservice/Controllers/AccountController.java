@@ -1,7 +1,12 @@
 package com.hackathon.finservice.Controllers;
 
 import com.hackathon.finservice.DTO.request.AccountCreationRequest;
+import com.hackathon.finservice.DTO.request.MoneyDepositRequest;
+import com.hackathon.finservice.DTO.response.TransactionResponse;
+import com.hackathon.finservice.Entities.Account;
+import com.hackathon.finservice.Entities.Transaction;
 import com.hackathon.finservice.Service.AccountService;
+import com.hackathon.finservice.Service.TransactionService;
 import com.hackathon.finservice.Service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +24,7 @@ public class AccountController {
 
     AccountService accountService;
     UserService userService;
+    TransactionService transactionService;
 
     @PostMapping("/account/create")
     public ResponseEntity<String> createAccount(@RequestBody AccountCreationRequest request,
@@ -26,6 +32,15 @@ public class AccountController {
         Long userId = userService.checkOwnership(request.getAccountNumber(), userDetails.getUsername());
         accountService.createAccount(userId, request.getAccountType());
         return ResponseEntity.ok("New account added successfully for user");
+    }
+
+    @PostMapping("/account/deposit")
+    public ResponseEntity<TransactionResponse> deposit(@RequestBody MoneyDepositRequest request,
+                                                             @AuthenticationPrincipal UserDetails userDetails){
+        Account account = userService.retrieveMainAccount(userDetails.getUsername());
+        Transaction transaction = transactionService.deposit(account, request.getAmount());
+        transactionService.monitorDeposit(transaction, account);
+        return ResponseEntity.ok(new TransactionResponse("Fund transferred successfully"));
     }
 
 
