@@ -32,4 +32,9 @@ public class AccountService {
     public Optional<Account> findById(String accountNumber) {
         return accountRepository.findById(accountNumber);
     }
+
+    public Account getAccount(Long id, Integer index) {
+        List<Account> accounts = accountRepository.findByUserId(id);
+        return accounts.get(index);
+    }
 }

@@ -60,4 +60,13 @@ public class UserService {
         }
         return userId;
     }
+
+
+    public AccountResponse retrieveAccountDetails(String email, Integer index) {
+        User user = userRepository.findByEmail(email).orElseThrow();
+        log.debug("Retrieved User: {}", user);
+        Account account = accountService.getAccount(user.getId(), index);
+        log.debug("Retrieved Account with index {}: {}", index, account);
+        return mapper.mapToAccountResponse(account);
+    }
 }
