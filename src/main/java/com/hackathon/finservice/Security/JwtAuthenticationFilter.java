@@ -85,7 +85,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return false;
         }catch (JwtException ex) {
             log.debug("Invalid JWT token");
-            sendErrorResponse(response, "Invalid JWT token");
+            sendErrorResponse(response, "Access Denied");
             return false;
         }
 
@@ -105,6 +105,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         log.debug("Creating custom error response: {}", message);
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
         response.setContentType(MediaType.TEXT_PLAIN_VALUE);
-        response.getWriter().write("Access Denied");
+        response.getWriter().write(message);
     }
 }
