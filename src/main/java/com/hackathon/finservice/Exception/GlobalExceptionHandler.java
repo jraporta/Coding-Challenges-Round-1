@@ -46,6 +46,11 @@ public class GlobalExceptionHandler {
         return ResponseEntity.ok(new TransactionResponse("Insufficient balance"));
     }
 
+    @ExceptionHandler(UserDataFormatException.class)
+    public ResponseEntity<String> handleUserDataFormatException(UserDataFormatException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
+
 
 
 

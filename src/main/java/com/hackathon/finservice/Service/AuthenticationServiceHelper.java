@@ -13,10 +13,6 @@ public class AuthenticationServiceHelper {
     public void checkEmailFormat(@NotEmpty String email) {
     }
 
-    //TODO
-    public void checkPasswordFormat(@NotEmpty String password) {
-    }
-
     public UserInfoResponse mapToUserInfoResponse(User user, Account account) {
         return new UserInfoResponse(
                 user.getName(),
