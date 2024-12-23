@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @AllArgsConstructor
@@ -18,7 +19,7 @@ public class AccountService {
     private final InterestService interestService;
 
     public Account createMainAccount(Long userId) {
-        return accountRepository.save(new Account(0, "Main", userId));
+        return createAccount(userId, "Main");
     }
 
     public Optional<Account> getMainAccount(Long id) {
@@ -28,12 +29,12 @@ public class AccountService {
                 .findFirst();
     }
 
-    public void createAccount(Long userId, String accountType) {
-        Account account = accountRepository.save(new Account(0, accountType, userId));
+    public Account createAccount(Long userId, String accountType) {
+        return accountRepository.save(new Account(UUID.randomUUID().toString(), 0, accountType, userId));
     }
 
-    public Optional<Account> findById(String accountNumber) {
-        return accountRepository.findById(accountNumber);
+    public Optional<Account> findByAccountNumber(String accountNumber) {
+        return accountRepository.findByAccountNumber(accountNumber);
     }
 
     public Account getAccount(Long id, Integer index) {

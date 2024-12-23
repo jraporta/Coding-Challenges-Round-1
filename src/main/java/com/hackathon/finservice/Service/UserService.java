@@ -53,7 +53,7 @@ public class UserService {
 
     public Long checkOwnership(String accountNumber, String email) {
         Long userId = findByEmail(email).getId();
-        Account account = accountService.findById(accountNumber)
+        Account account = accountService.findByAccountNumber(accountNumber)
                 .orElseThrow(() -> new AccountNotExistsException("Bad account number"));
         if (!userId.equals(account.getUserId())) {
             throw new NotAccountOwnerException("Bad request");

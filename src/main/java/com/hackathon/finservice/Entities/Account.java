@@ -16,14 +16,20 @@ import lombok.*;
 public class Account {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     @EqualsAndHashCode.Include
+    @NonNull
     private String accountNumber;
 
-    @NonNull private double balance;
+    @NonNull
+    private double balance;
 
-    @NonNull private String accountType;
+    @NonNull
+    private String accountType;
 
-    @NonNull private Long userId;
+    @NonNull
+    private Long userId;
 
 }

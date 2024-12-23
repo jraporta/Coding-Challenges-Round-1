@@ -94,7 +94,7 @@ public class TransactionService {
 
     @Async
     public void monitorTransfer(Transaction transaction, Account account) {
-        Account targetAccount = accountService.findById(transaction.getTargetAccountNumber())
+        Account targetAccount = accountService.findByAccountNumber(transaction.getTargetAccountNumber())
                 .orElseThrow();
         accountService.deposit(account, -transaction.getAmount());
         accountService.deposit(targetAccount, transaction.getAmount());
