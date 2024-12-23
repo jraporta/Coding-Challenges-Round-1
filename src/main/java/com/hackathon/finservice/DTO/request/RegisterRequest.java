@@ -20,6 +20,5 @@ public class RegisterRequest {
     private String password;
 
     @NotEmpty(message = "email is required")
-    @Email(message = "Invalid email")
     private String email;
 }

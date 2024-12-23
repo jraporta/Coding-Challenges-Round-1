@@ -7,6 +7,7 @@ import com.hackathon.finservice.DTO.response.UserInfoResponse;
 import com.hackathon.finservice.Entities.Account;
 import com.hackathon.finservice.Exception.EmailAlreadyExistsException;
 import com.hackathon.finservice.Security.JwtTokenUtil;
+import com.hackathon.finservice.Util.EmailFormatValidator;
 import com.hackathon.finservice.Util.PasswordFormatValidator;
 import lombok.AllArgsConstructor;
 import com.hackathon.finservice.Entities.User;
@@ -39,6 +40,8 @@ public class AuthenticationService {
         passwordFormatValidator.setPassword(request.getPassword());
         passwordFormatValidator.validate();
         log.debug("Password passed format check");
+        EmailFormatValidator.validate(request.getEmail());
+        log.debug("Email passed format check");
         if (userService.existsByEmail(request.getEmail())) {
             log.debug("Register failed: email already exists");
             throw new EmailAlreadyExistsException("Email already exists");
