@@ -49,4 +49,8 @@ public class AccountService {
         accountRepository.save(account);
         interestService.subscribe(account);
     }
+
+    public Account save(Account account){
+        return accountRepository.save(account);
+    }
 }
