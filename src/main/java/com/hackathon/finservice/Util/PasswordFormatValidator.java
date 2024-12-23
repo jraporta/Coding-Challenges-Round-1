@@ -13,11 +13,14 @@ public class PasswordFormatValidator {
     }
 
     public void validate() throws UserDataFormatException {
-        if (!password.matches("^.*[A-Z]*$")) {
+        if (!password.matches("^.*[A-Z]+.*$")) {
             throw new UserDataFormatException("Password must contain at least one uppercase letter");
         }
-        if (!password.matches("^.*\\d.*$")) {
+        if (!password.matches("^.*\\d.*$") && !password.matches("^.*[^\\p{Alnum}].*$")) {
             throw new UserDataFormatException("Password must contain at least one digit and one special character");
+        }
+        if (!password.matches("^.*\\d.*$")) {
+            throw new UserDataFormatException("Password must contain at least one digit");
         }
         if (!password.matches("^.*[^\\p{Alnum}].*$")) {
             throw new UserDataFormatException("Password must contain at least one special character");
