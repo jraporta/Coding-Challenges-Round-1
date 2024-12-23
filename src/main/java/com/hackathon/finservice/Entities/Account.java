@@ -18,6 +18,8 @@ public class Account {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String accountNumber;
 
+    @NonNull private double balance;
+
     @NonNull private String accountType;
 
     @NonNull private Long userId;

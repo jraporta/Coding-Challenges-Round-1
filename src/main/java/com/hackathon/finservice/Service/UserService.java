@@ -1,5 +1,7 @@
 package com.hackathon.finservice.Service;
 
+import com.hackathon.finservice.DTO.DtoMapper;
+import com.hackathon.finservice.DTO.response.AccountResponse;
 import com.hackathon.finservice.DTO.response.UserInfoResponse;
 import com.hackathon.finservice.Entities.Account;
 import com.hackathon.finservice.Entities.User;
@@ -16,6 +18,7 @@ public class UserService {
     UserRepository userRepository;
     AccountService accountService;
     AuthenticationServiceHelper helper;
+    DtoMapper mapper;
 
     public User saveUser(User user) {
         return userRepository.save(user);
@@ -31,5 +34,14 @@ public class UserService {
         Account account = accountService.getMainAccount(user.getId()).orElseThrow();
         log.debug("Retrieved Main Account: {}", account);
         return helper.mapToUserInfoResponse(user, account);
+    }
+
+
+    public AccountResponse retrieveMainAccountDetails(String email) {
+        User user = userRepository.findByEmail(email).orElseThrow();
+        log.debug("Retrieved User: {}", user);
+        Account account = accountService.getMainAccount(user.getId()).orElseThrow();
+        log.debug("Retrieved Main Account: {}", account);
+        return mapper.mapToAccountResponse(account);
     }
 }

@@ -15,7 +15,7 @@ public class AccountService {
     private final AccountRepository accountRepository;
 
     public Account createAccount(Long userId) {
-        return accountRepository.save(new Account("Main", userId));
+        return accountRepository.save(new Account(0, "Main", userId));
     }
 
     public Optional<Account> getMainAccount(Long id) {
