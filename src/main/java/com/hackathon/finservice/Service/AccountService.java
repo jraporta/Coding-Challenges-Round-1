@@ -1,6 +1,7 @@
 package com.hackathon.finservice.Service;
 
 import com.hackathon.finservice.Entities.Account;
+import com.hackathon.finservice.Exception.AccountNotExistsException;
 import com.hackathon.finservice.Repositories.AccountRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,7 +15,7 @@ public class AccountService {
 
     private final AccountRepository accountRepository;
 
-    public Account createAccount(Long userId) {
+    public Account createMainAccount(Long userId) {
         return accountRepository.save(new Account(0, "Main", userId));
     }
 
@@ -23,5 +24,11 @@ public class AccountService {
         return accounts.stream()
                 .filter(account -> account.getAccountType().equalsIgnoreCase("Main"))
                 .findFirst();
+    }
+
+    public Account createAccount(String accountNumber, String accountType) {
+        Account existingAccount = accountRepository.findById(accountNumber)
+                .orElseThrow(() -> new AccountNotExistsException("Bad account number"));
+        return accountRepository.save(new Account(0, accountType, existingAccount.getUserId()));
     }
 }

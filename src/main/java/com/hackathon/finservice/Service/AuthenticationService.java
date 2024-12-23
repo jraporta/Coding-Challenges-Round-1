@@ -46,7 +46,7 @@ public class AuthenticationService {
                 request.getEmail(),
                 passwordEncoder.encode(request.getPassword())));
         log.debug("Registered User: {}", user);
-        Account account = accountService.createAccount(user.getId());
+        Account account = accountService.createMainAccount(user.getId());
         log.debug("Created Account: {}", account);
         return helper.mapToUserInfoResponse(user, account);
     }
