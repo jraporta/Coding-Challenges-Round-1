@@ -20,7 +20,7 @@ public class TransactionService {
 
     public Transaction deposit(Account account, double amount) {
         Transaction transaction = Transaction.builder()
-                .amount(amount)
+                .amount(applyDepositFee(amount))
                 .transactionType(TransactionType.CASH_DEPOSIT)
                 .transactionStatus(TransactionStatus.PENDING)
                 .transactionDate(Instant.now().toEpochMilli())
@@ -33,14 +33,19 @@ public class TransactionService {
     @Async
     public void monitorDeposit(Transaction transaction, Account account) {
         double amount = transaction.getAmount();
-        int fee = amount > 50000 ? 2 : 0;
-        amount = amount * (1 - fee / 100.0);
         accountService.deposit(account, amount);
         approveTransaction(transaction);
+    }
+
+    private double applyDepositFee(double amount) {
+        int fee = amount > 50000 ? 2 : 0;
+        return amount * (1 - fee / 100.0);
     }
 
     private void approveTransaction(Transaction transaction) {
         transaction.setTransactionStatus(TransactionStatus.APPROVED);
         transactionRepository.save(transaction);
     }
+
+
 }
