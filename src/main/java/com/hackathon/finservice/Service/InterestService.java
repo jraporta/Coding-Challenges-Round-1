@@ -1,6 +1,7 @@
 package com.hackathon.finservice.Service;
 
 import com.hackathon.finservice.Entities.Account;
+import com.hackathon.finservice.Util.JsonUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ public class InterestService {
 
     private final double INTEREST_RATE = 10;
     private final String INVEST_TYPE = "Invest";
+    private final String LOG_PATH = "interest.log";
     private final List<Account> investAccounts = new ArrayList<>();
 
     @Scheduled(fixedRate = 10000)
@@ -26,6 +28,7 @@ public class InterestService {
         double interest = account.getBalance() * INTEREST_RATE / 100;
         account.setBalance(account.getBalance() + interest);
         log.info("Applied interest: Interest:{} FinalBalance:{}", interest, account.getBalance());
+        JsonUtil.logJsonToFile(LOG_PATH, account);
     }
 
     public void subscribe(Account account){
