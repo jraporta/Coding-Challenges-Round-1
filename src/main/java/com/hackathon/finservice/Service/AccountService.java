@@ -15,6 +15,7 @@ import java.util.Optional;
 public class AccountService {
 
     private final AccountRepository accountRepository;
+    private final InterestService interestService;
 
     public Account createMainAccount(Long userId) {
         return accountRepository.save(new Account(0, "Main", userId));
@@ -27,8 +28,8 @@ public class AccountService {
                 .findFirst();
     }
 
-    public Account createAccount(Long userId, String accountType) {
-        return accountRepository.save(new Account(0, accountType, userId));
+    public void createAccount(Long userId, String accountType) {
+        Account account = accountRepository.save(new Account(0, accountType, userId));
     }
 
     public Optional<Account> findById(String accountNumber) {
@@ -45,5 +46,6 @@ public class AccountService {
         log.debug("Made a deposit of {} in account {}. Final balance {}",
                 amount, account.getAccountNumber(), account.getBalance());
         accountRepository.save(account);
+        interestService.subscribe(account);
     }
 }
