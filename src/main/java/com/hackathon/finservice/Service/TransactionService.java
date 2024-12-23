@@ -106,6 +106,7 @@ public class TransactionService {
         if (transaction.getAmount() > 80000) {
             status = TransactionStatus.FRAUD;
         }
+        transaction.setTransactionStatus(status);
         transactionRepository.save(transaction);
 
         List<Transaction> last5 = transactionRepository.findTop5ByOrderByTransactionDateDesc();
@@ -119,7 +120,9 @@ public class TransactionService {
                 transactionRepository.saveAll(last5);
             }
         }
+    }
 
-
+    public List<Transaction> getHistory(Account account) {
+        return transactionRepository.findAllBySourceAccountNumber(account.getAccountNumber());
     }
 }

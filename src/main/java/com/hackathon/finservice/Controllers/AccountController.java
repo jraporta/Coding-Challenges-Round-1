@@ -13,10 +13,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api")
@@ -61,6 +60,13 @@ public class AccountController {
                 request.getAmount());
         transactionService.monitorTransfer(transaction, account);
         return ResponseEntity.ok(new TransactionResponse("Fund transferred successfully"));
+    }
+
+    @GetMapping("/account/transactions")
+    public ResponseEntity<List<Transaction>> getHistory(@AuthenticationPrincipal UserDetails userDetails){
+        Account account = userService.retrieveMainAccount(userDetails.getUsername());
+        List<Transaction> transactions = transactionService.getHistory(account);
+        return ResponseEntity.ok(transactions);
     }
 
 
