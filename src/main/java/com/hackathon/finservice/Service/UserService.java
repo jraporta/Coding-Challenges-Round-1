@@ -10,6 +10,7 @@ import com.hackathon.finservice.Exception.NotAccountOwnerException;
 import com.hackathon.finservice.Repositories.UserRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -34,6 +35,7 @@ public class UserService {
         return userRepository.findByEmail(email).orElseThrow();
     }
 
+    @Cacheable("dataCache")
     public UserInfoResponse retrieveUserDetails(String email) {
         User user = userRepository.findByEmail(email).orElseThrow();
         log.debug("Retrieved User: {}", user);

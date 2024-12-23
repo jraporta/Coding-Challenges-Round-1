@@ -32,6 +32,7 @@ public class InterestService {
     private void applyInterest(String accountNumber) {
         Account account = accountRepository.findByAccountNumber(accountNumber).orElseThrow();
         double interest = account.getBalance() * INTEREST_RATE / 100;
+        interest = Math.round(interest * 100.0) / 100.0;
         account.setBalance(account.getBalance() + interest);
         account = accountRepository.save(account);
         log.info("Applied interest: Interest:{} FinalBalance:{}", interest, account.getBalance());
