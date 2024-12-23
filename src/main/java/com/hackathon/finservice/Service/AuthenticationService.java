@@ -31,6 +31,7 @@ public class AuthenticationService {
     private final UserDetailsService userDetailsService;
     private final JwtTokenUtil jwtTokenUtil;
     private final PasswordEncoder passwordEncoder;
+    private final TokenBlacklistService blacklistService;
 
     public UserInfoResponse register(RegisterRequest request) {
         helper.checkPasswordFormat(request.getPassword());
@@ -69,8 +70,8 @@ public class AuthenticationService {
         return new LoginResponse(token);
     }
 
-    //TODO
-    public String logout() {
-        return "";
+    public void logout(String token) {
+        blacklistService.addToken(token);
+        log.debug("Added token to blacklist: {}", token);
     }
 }

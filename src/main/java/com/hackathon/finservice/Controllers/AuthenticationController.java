@@ -9,6 +9,8 @@ import com.hackathon.finservice.Service.AuthenticationService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,9 +35,11 @@ public class AuthenticationController {
     }
 
     @GetMapping("/logout")
-    public ResponseEntity<String> logout() {
-        log.debug("Logout request.");
-        return ResponseEntity.ok(authenticationService.logout());
+    public ResponseEntity<String> logout(@RequestHeader("Authorization") String authHeader) {
+        String token = authHeader.substring(7);
+        log.debug("Logout request");
+        authenticationService.logout(token);
+        return ResponseEntity.ok("");
     }
 
 }

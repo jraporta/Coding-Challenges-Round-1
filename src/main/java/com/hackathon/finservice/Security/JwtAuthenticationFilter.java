@@ -1,5 +1,6 @@
 package com.hackathon.finservice.Security;
 
+import com.hackathon.finservice.Service.TokenBlacklistService;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
@@ -26,6 +27,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final UserDetailsService userDetailsService;
     private final JwtTokenUtil jwtTokenUtil;
+    private final TokenBlacklistService blacklistService;
 
     @Value("${jwt.header}")
     private String header;
@@ -33,9 +35,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Value("${jwt.prefix}")
     private String prefix;
 
-    public JwtAuthenticationFilter(UserDetailsService userDetailsService, JwtTokenUtil jwtTokenUtil) {
+    public JwtAuthenticationFilter(UserDetailsService userDetailsService, JwtTokenUtil jwtTokenUtil, TokenBlacklistService blacklistService) {
         this.userDetailsService = userDetailsService;
         this.jwtTokenUtil = jwtTokenUtil;
+        this.blacklistService = blacklistService;
     }
 
     @Override
@@ -75,6 +78,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (authorizationHeader != null && authorizationHeader.startsWith(prefix + " ")) {
             jwtToken = authorizationHeader.substring(prefix.length() + 1);
             log.debug("Read token from header: {}", jwtToken);
+        }
+        if (blacklistService.isInBlacklist(jwtToken)) {
+            log.debug("Invalid Jwt: is in blacklist");
+            sendErrorResponse(response, "Access Denied");
+            return false;
         }
         try {
             username = jwtTokenUtil.extractUsername(jwtToken);
