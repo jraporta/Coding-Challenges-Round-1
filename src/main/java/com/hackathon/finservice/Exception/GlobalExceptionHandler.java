@@ -1,5 +1,6 @@
 package com.hackathon.finservice.Exception;
 
+import com.hackathon.finservice.DTO.response.TransactionResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -38,6 +39,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(AccountNotFoundException.class)
     public ResponseEntity<String> handleAccountNotFound(AccountNotFoundException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(InsufficientBalanceException.class)
+    public ResponseEntity<TransactionResponse> handleInsufficientBalance(InsufficientBalanceException ex) {
+        return ResponseEntity.ok(new TransactionResponse("Insufficient balance"));
     }
 
 

@@ -4,6 +4,7 @@ import com.hackathon.finservice.Entities.Account;
 import com.hackathon.finservice.Entities.Transaction;
 import com.hackathon.finservice.Entities.TransactionStatus;
 import com.hackathon.finservice.Entities.TransactionType;
+import com.hackathon.finservice.Exception.InsufficientBalanceException;
 import com.hackathon.finservice.Repositories.TransactionRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
@@ -48,4 +49,29 @@ public class TransactionService {
     }
 
 
+    public Transaction withdraw(Account account, double amount) {
+        double finalAmount = applyWithdrawFee(amount);
+        if (finalAmount > account.getBalance()) {
+            throw new InsufficientBalanceException("Insufficient balance");
+        }
+        Transaction transaction = Transaction.builder()
+                .amount(finalAmount)
+                .transactionType(TransactionType.CASH_WITHDRAWAL)
+                .transactionStatus(TransactionStatus.PENDING)
+                .transactionDate(Instant.now().toEpochMilli())
+                .sourceAccountNumber(account.getAccountNumber())
+                .targetAccountNumber("N/A")
+                .build();
+        return transactionRepository.save(transaction);
+    }
+
+    private double applyWithdrawFee(double amount) {
+        int fee = amount > 10000 ? 1 : 0;
+        return amount * (1 + fee / 100.0);
+    }
+
+    public void monitorWithdraw(Transaction transaction, Account account) {
+        accountService.deposit(account, -transaction.getAmount());
+        approveTransaction(transaction);
+    }
 }
