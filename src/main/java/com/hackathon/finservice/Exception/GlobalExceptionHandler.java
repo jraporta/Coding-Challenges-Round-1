@@ -30,4 +30,12 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
 
+    @ExceptionHandler(NotAccountOwnerException.class)
+    public ResponseEntity<String> handleNotAccountOwner(NotAccountOwnerException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
+
+
+
+
 }

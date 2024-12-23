@@ -5,6 +5,8 @@ import com.hackathon.finservice.DTO.response.AccountResponse;
 import com.hackathon.finservice.DTO.response.UserInfoResponse;
 import com.hackathon.finservice.Entities.Account;
 import com.hackathon.finservice.Entities.User;
+import com.hackathon.finservice.Exception.AccountNotExistsException;
+import com.hackathon.finservice.Exception.NotAccountOwnerException;
 import com.hackathon.finservice.Repositories.UserRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +30,10 @@ public class UserService {
         return userRepository.existsByEmail(email);
     }
 
+    private User findByEmail(String email){
+        return userRepository.findByEmail(email).orElseThrow();
+    }
+
     public UserInfoResponse retrieveUserDetails(String email) {
         User user = userRepository.findByEmail(email).orElseThrow();
         log.debug("Retrieved User: {}", user);
@@ -43,5 +49,15 @@ public class UserService {
         Account account = accountService.getMainAccount(user.getId()).orElseThrow();
         log.debug("Retrieved Main Account: {}", account);
         return mapper.mapToAccountResponse(account);
+    }
+
+    public Long checkOwnership(String accountNumber, String email) {
+        Long userId = findByEmail(email).getId();
+        Account account = accountService.findById(accountNumber)
+                .orElseThrow(() -> new AccountNotExistsException("Bad account number"));
+        if (!userId.equals(account.getUserId())) {
+            throw new NotAccountOwnerException("Bad request");
+        }
+        return userId;
     }
 }
