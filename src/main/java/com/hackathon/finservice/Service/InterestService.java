@@ -32,10 +32,9 @@ public class InterestService {
     }
 
     public void subscribe(Account account){
-        if (account.getAccountType().equals(INVEST_TYPE)) {
+        if (account.getAccountType().equalsIgnoreCase(INVEST_TYPE)) {
             if (!investAccounts.contains(account)) {
                 investAccounts.add(account);
-                execute(account);
             }
         }
     }
