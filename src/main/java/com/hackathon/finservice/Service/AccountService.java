@@ -3,6 +3,7 @@ package com.hackathon.finservice.Service;
 import com.hackathon.finservice.Entities.Account;
 import com.hackathon.finservice.Repositories.AccountRepository;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.Optional;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class AccountService {
 
     private final AccountRepository accountRepository;
@@ -40,6 +42,8 @@ public class AccountService {
 
     public void deposit(Account account, double amount) {
         account.setBalance(account.getBalance() + amount);
+        log.debug("Made a deposit of {} in account {}. Final balance {}",
+                amount, account.getAccountNumber(), account.getBalance());
         accountRepository.save(account);
     }
 }

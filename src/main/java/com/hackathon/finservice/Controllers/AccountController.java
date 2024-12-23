@@ -1,6 +1,7 @@
 package com.hackathon.finservice.Controllers;
 
 import com.hackathon.finservice.DTO.request.AccountCreationRequest;
+import com.hackathon.finservice.DTO.request.FundTransferRequest;
 import com.hackathon.finservice.DTO.request.TransactionRequest;
 import com.hackathon.finservice.DTO.response.TransactionResponse;
 import com.hackathon.finservice.Entities.Account;
@@ -50,6 +51,16 @@ public class AccountController {
         Transaction transaction = transactionService.withdraw(account, request.getAmount());
         transactionService.monitorWithdraw(transaction, account);
         return ResponseEntity.ok(new TransactionResponse("Cash withdrawn successfully"));
+    }
+
+    @PostMapping("/account/fund-transfer")
+    public ResponseEntity<TransactionResponse> transfer(@RequestBody FundTransferRequest request,
+                                                        @AuthenticationPrincipal UserDetails userDetails){
+        Account account = userService.retrieveMainAccount(userDetails.getUsername());
+        Transaction transaction = transactionService.transfer(account, request.getTargetAccountNumber(),
+                request.getAmount());
+        transactionService.monitorTransfer(transaction, account);
+        return ResponseEntity.ok(new TransactionResponse("Fund transferred successfully"));
     }
 
 
