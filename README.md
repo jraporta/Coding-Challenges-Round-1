@@ -1,3 +1,7 @@
+My final score:
+
+<img src="https://github.com/user-attachments/assets/1af5e539-f95a-48d4-b109-6fd17a034f0f" alt="Puntuación final" width="300"/>
+
 # 🏦 CaixaBank Java Backend Challenge ☕️
 
 Category   ➡️   Software
